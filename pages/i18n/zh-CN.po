@@ -1,0 +1,2 @@
+msgid "more"
+msgstr "查看更多"
