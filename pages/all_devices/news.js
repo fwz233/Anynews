@@ -10,11 +10,11 @@ const { messageBuilder } = getApp()._options.globalData;
 var titleText
 var i18n= {
   "1": {
-    "more": "Getting body",
+    "more": "Loading...",
     "first_notic":"Can't go any further",
   },
   "0": {
-    "more": "正在获取正文",
+    "more": "加载中...",
     "first_notic":"不能再往前了",
   }
 }
@@ -64,9 +64,9 @@ Page({
     // });
     titleText=hmUI.createWidget(hmUI.widget.TEXT, {
       x: 54,
-      y: mpx_h(5),
+      y: mpx_h(5)+mpx_auto(5,DEVICE_HEIGHT),
       w: DEVICE_WIDTH-108,
-      h: mpx_h(95),
+      h: mpx_h(90)-mpx_auto(10,DEVICE_HEIGHT),
       color: 0xffffff,
       text_size: 36,
       align_h: hmUI.align.CENTER_H,
@@ -84,6 +84,13 @@ Page({
     }
     function mpx_h(screenPx){
       screenPx=(screenPx/100)*DEVICE_HEIGHT
+      return screenPx
+    }
+    function mpx_auto(screenPx,devicePx){
+      if(screenState==0)
+      screenPx=(screenPx/100)*DEVICE_HEIGHT
+      else
+      screenPx=0
       return screenPx
     }
     //i18n polyfill
@@ -114,7 +121,7 @@ Page({
         text_size: 36,
         text_width: DEVICE_WIDTH-108
       })
-      var pagetTotal=Math.ceil(height/((90/100)*DEVICE_HEIGHT)),pageNow=1
+      var pagetTotal=Math.ceil(height/(mpx_h(90)-mpx_auto(10,DEVICE_HEIGHT))),pageNow=1
 
       do{
       nowPageNum++
@@ -124,7 +131,7 @@ Page({
         text_width: DEVICE_WIDTH-108
       })
       calculateHeight=height
-      }while(calculateHeight<((90/100)*DEVICE_HEIGHT))
+      }while(calculateHeight<(mpx_h(90)-mpx_auto(10,DEVICE_HEIGHT)))
       resultText=text.substring(pageNum,nowPageNum+36)
       page.push(nowPageNum)
       titleText.setProperty(hmUI.prop.MORE, {
@@ -157,7 +164,7 @@ Page({
                 text_width: DEVICE_WIDTH-108
               })
               calculateHeight=height
-              }while(calculateHeight<((90/100)*DEVICE_HEIGHT))
+              }while(calculateHeight<(mpx_h(90)-mpx_auto(10,DEVICE_HEIGHT)))
               resultText=text.substring(pageNum,nowPageNum+36)
               page.push(nowPageNum)
               titleText.setProperty(hmUI.prop.MORE, {
@@ -184,6 +191,7 @@ Page({
         click_func: (button_widget) => {
           if(pageNow<pagetTotal){
             pageNow++
+            pageNum=pageNum-1
             do{
               nowPageNum++
               resultText=text.substring(pageNum,nowPageNum)
@@ -192,7 +200,7 @@ Page({
                 text_width: DEVICE_WIDTH-108
               })
               calculateHeight=height
-              }while(calculateHeight<((90/100)*DEVICE_HEIGHT))
+              }while(calculateHeight<(mpx_h(90)-mpx_auto(10,DEVICE_HEIGHT)))
               resultText=text.substring(pageNum,nowPageNum+36)
               page.push(nowPageNum)
               titleText.setProperty(hmUI.prop.MORE, {
@@ -213,6 +221,22 @@ Page({
           
         },
       })
+      //function----
+    function mpx_w(screenPx){
+      screenPx=(screenPx/100)*DEVICE_WIDTH
+      return screenPx
+    }
+    function mpx_h(screenPx){
+      screenPx=(screenPx/100)*DEVICE_HEIGHT
+      return screenPx
+    }
+    function mpx_auto(screenPx,devicePx){
+      if(screenState==0)
+      screenPx=(screenPx/100)*DEVICE_HEIGHT
+      else
+      screenPx=0
+      return screenPx
+    }
       //i18n polyfill
         function getText(str){
           if(hmSetting.getLanguage()!=0)

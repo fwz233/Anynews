@@ -48,7 +48,7 @@ Page({
       w: DEVICE_WIDTH-108,
       h: mpx_h(95),
       color: 0xffffff,
-      text_size: 18,
+      text_size: 24,
       align_h: hmUI.align.CENTER_H,
       align_v: hmUI.align.CENTER_V,
       text_style:hmUI.text_style.WRAP,
@@ -64,6 +64,13 @@ Page({
     }
     function mpx_h(screenPx){
       screenPx=(screenPx/100)*DEVICE_HEIGHT
+      return screenPx
+    }
+    function mpx_auto(screenPx,devicePx){
+      if(screenState==0)
+      screenPx=(screenPx/100)*DEVICE_HEIGHT
+      else
+      screenPx=0
       return screenPx
     }
     //i18n polyfill

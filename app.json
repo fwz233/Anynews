@@ -89,7 +89,26 @@
         {
           "name": "Falconw",
           "deviceSource": 415
-        }
+        },{
+          "name": "gts4-mini",
+          "deviceSource": 246
+        },
+        {
+          "name": "gts4-miniw",
+          "deviceSource": 247
+        },
+        {
+          "name": "band71",
+          "deviceSource": 252
+        },
+        {
+          "name": "band72",
+          "deviceSource": 253
+        },
+        {
+          "name": "band73",
+          "deviceSource": 254
+        }       
       ],
       "designWidth": 480
     }
