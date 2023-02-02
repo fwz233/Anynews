@@ -7,11 +7,11 @@ import { readFileSync, writeFileSync } from '../../utils/config/fs';
 var screenState
 const logger = DeviceRuntimeCore.HmLogger.getLogger("fetch_api");
 const { messageBuilder } = getApp()._options.globalData;
-var titleText
+var resultAllText=""
 var i18n= {
   "1": {
     "more": "Loading...",
-    "first_notic":"Can't go any further",
+    "first_notic":"can't go any further",
   },
   "0": {
     "more": "加载中...",
@@ -103,6 +103,9 @@ Page({
     }
   },onDestory() {
       //setScreenKeep-Zepp
+      messageBuilder.request({
+        method: "FETCH_NEWS_CONTENT_STOP",
+      })
       hmApp.setScreenKeep(false)
   },
   fetchData() {
@@ -114,25 +117,29 @@ Page({
       const { result = {} } = data
       const  text = result
       logger.log(text)
-      var resultText
+  //News inish and reloadPage
+      if(text=="News_Finish"){
+
+
+         var resultText
       var pageNum=0,page=[0],nowPageNum=0
       var calculateHeight
-      const { width, height }= hmUI.getTextLayout(text, {
+      const { width, height }= hmUI.getTextLayout(resultAllText, {
         text_size: 36,
         text_width: DEVICE_WIDTH-108
       })
-      var pagetTotal=Math.ceil(height/(mpx_h(90)-mpx_auto(10,DEVICE_HEIGHT))),pageNow=1
+      var pagetTotal=Math.ceil(height/(mpx_h(90)-mpx_auto(10,DEVICE_HEIGHT)))-1,pageNow=1
 
       do{
       nowPageNum++
-      resultText=text.substring(pageNum,nowPageNum)
+      resultText=resultAllText.substring(pageNum,nowPageNum)
       const { width, height }= hmUI.getTextLayout(resultText, {
         text_size: 36,
         text_width: DEVICE_WIDTH-108
       })
       calculateHeight=height
       }while(calculateHeight<(mpx_h(90)-mpx_auto(10,DEVICE_HEIGHT)))
-      resultText=text.substring(pageNum,nowPageNum+36)
+      resultText=resultAllText.substring(pageNum,nowPageNum+36)
       page.push(nowPageNum)
       titleText.setProperty(hmUI.prop.MORE, {
         align_h:hmUI.align.LEFT,
@@ -150,7 +157,7 @@ Page({
         press_src: 'clickdown.png',
         normal_src: 'stop.png',
         click_func: (button_widget) => {
-          if(pageNow>1){
+          if(pageNow>1&&pageNow!=99999){
             pageNow--
             pageNum=page.pop()
             pageNum=page.pop()
@@ -158,14 +165,14 @@ Page({
             nowPageNum=pageNum
             do{
               nowPageNum++
-              resultText=text.substring(pageNum,nowPageNum)
+              resultText=resultAllText.substring(pageNum,nowPageNum)
               const { width, height }= hmUI.getTextLayout(resultText, {
                 text_size: 36,
                 text_width: DEVICE_WIDTH-108
               })
               calculateHeight=height
               }while(calculateHeight<(mpx_h(90)-mpx_auto(10,DEVICE_HEIGHT)))
-              resultText=text.substring(pageNum,nowPageNum+36)
+              resultText=resultAllText.substring(pageNum,nowPageNum+36)
               page.push(nowPageNum)
               titleText.setProperty(hmUI.prop.MORE, {
                 align_h:hmUI.align.LEFT,
@@ -190,35 +197,40 @@ Page({
         normal_src: 'start.png',
         click_func: (button_widget) => {
           if(pageNow<pagetTotal){
-            pageNow++
-            pageNum=pageNum-1
-            do{
-              nowPageNum++
-              resultText=text.substring(pageNum,nowPageNum)
-              const { width, height }= hmUI.getTextLayout(resultText, {
-                text_size: 36,
-                text_width: DEVICE_WIDTH-108
-              })
-              calculateHeight=height
-              }while(calculateHeight<(mpx_h(90)-mpx_auto(10,DEVICE_HEIGHT)))
-              resultText=text.substring(pageNum,nowPageNum+36)
-              page.push(nowPageNum)
-              titleText.setProperty(hmUI.prop.MORE, {
-                align_h:hmUI.align.LEFT,
-                align_v:hmUI.align.TOP,
-                text:resultText
-              })
-              pageNum=page.slice(-1)
-              nowPageNum=pageNum
+
+              pageNow++
+              pageNum=pageNum-1
+              do{
+                nowPageNum++
+                resultText=resultAllText.substring(pageNum,nowPageNum)
+                const { width, height }= hmUI.getTextLayout(resultText, {
+                  text_size: 36,
+                  text_width: DEVICE_WIDTH-108
+                })
+                calculateHeight=height
+                }while(calculateHeight<(mpx_h(90)-mpx_auto(10,DEVICE_HEIGHT)))
+                resultText=resultAllText.substring(pageNum,nowPageNum+36)
+                page.push(nowPageNum)
+                titleText.setProperty(hmUI.prop.MORE, {
+                  align_h:hmUI.align.LEFT,
+                  align_v:hmUI.align.TOP,
+                  text:resultText
+                })
+                pageNum=page.slice(-1)
+                nowPageNum=pageNum
+          
           }else if(pageNow==pagetTotal){
-            resultText=text.substring(pageNum)
+            resultText=resultAllText.substring(pageNum)
             titleText.setProperty(hmUI.prop.MORE, {
               align_h:hmUI.align.LEFT,
               align_v:hmUI.align.TOP,
               text:resultText
             })
+            pageNow++
+            page.push(nowPageNum)
+          }else if(pageNow>pagetTotal){
+            hmApp.goBack()
           }
-          
         },
       })
       //function----
@@ -246,6 +258,14 @@ Page({
         return str
         }
       //what fuck code who wirte
+      
+      
+   } else{
+
+    resultAllText=resultAllText+text
+    this.fetchData()
+
+    }
     })
   },
 });

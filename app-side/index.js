@@ -410,9 +410,16 @@ const fetchData_3_0 = async (ctx) => {
 var splitRes=data.split("<h3 class=\"fc-item__title\"><a href=\"");//·-datetime
 var resultContext=""
 for(var sb=1;sb<=5;sb=sb+1){
-var splitContext=splitRes[sb].split(/\" class=\"fc-item__link\"|<span class="fc-item__kicker">|<\/span>|<span class=\"js-headline-text\">/)
+  if(sb!=2){
+var splitContext=splitRes[sb].split(/\" class=\"fc-item__link\"|<div class=\"fc-item__kicker\">|<\/span>|<span class=\"js-headline-text\">|<\/div>/)
   newsLink[sb-1]=splitContext[0]
-  resultContext=resultContext+"fwz233"+splitContext[0]+"fwz233"+splitContext[2]+"/"+splitContext[4]
+  resultContext=resultContext+"fwz233"+splitContext[0]+"fwz233"+splitContext[2].replace(/^\s+|\s+$/g,"")+"/"+splitContext[4]
+}else{
+  var splitContext=splitRes[sb].split("\" class=\"fc-item__link\"")
+
+  newsLink[sb-1]=splitContext[0]
+  resultContext=resultContext+"fwz233"+splitContext[0]+"fwz233"+"Live/Please go to the official website to watch the live broadcast"
+}
 }
 ctx.response({
   data: { result: resultContext},
@@ -500,9 +507,10 @@ ctx.response({
 
 
 
-
+var fetch_num=0,fetch_result=[],fetch_result_num=0
 const fetchData_text = async (ctx,viewNumber) => {
   try {
+  if(fetch_num==0&&fetch_result_num==0){
   await fetch('https://www.xda-developers.com'+newsLink[viewNumber])
   .then(response => response.text())
   .then(data => {
@@ -525,13 +533,15 @@ resultContext=resultContext.replaceAll("&#039;","'");
 resultContext=resultContext.replaceAll("&#39;","'");
 resultContext=resultContext.replaceAll("&quot;","\"");
 resultContext=resultContext.replaceAll("&#34;","\"");
+resultContext=resultContext.replaceAll("&nbsp;"," ");
 resultContext=resultContext.replaceAll("<strong>","");
 resultContext=resultContext.replaceAll("<\/strong>","");
 resultContext=resultContext.replaceAll("<em>","");
 resultContext=resultContext.replaceAll("<\/em>","");
 resultContext=resultContext.replaceAll("<\/a>","");
+
 // "	&#34;	&quot;
-// &	&#38;	&amp;
+// &	&#38;	&amp;  
 // <	&#60;	&lt;
 // >	&#62;	&gt;
 // 不断开空格(non-breaking space)	&#160;	&nbsp;
@@ -541,10 +551,37 @@ for(var sb=0;sb<resultContextSplit.length;sb=sb+2){
   resultContext=resultContext+resultContextSplit[sb]
 }
 
+ fetch_result_num= Math.ceil(resultContext.length/1111) 
+for(var sb=0;sb<fetch_result_num;sb++){
+  if(sb>=(fetch_result_num-2))
+fetch_result.push(resultContext.substring(sb*1111))  
+else
+fetch_result.push(resultContext.substring(sb*1111,(sb+1)*1111))//.replaceAll("　"," "))
+}
+fetch_result_num=fetch_result.length
+fetch_num++
+
 ctx.response({
-  data: { result: resultContext},
+  data: { result: fetch_result[0]},
 })
 });
+
+}else{
+  if(fetch_num<(fetch_result_num-1)){
+    ctx.response({
+      data: { result: fetch_result[fetch_num]},
+    })
+    fetch_num++
+  }else if(fetch_num==(fetch_result_num-1)){
+         ctx.response({
+      data: { result: "News_Finish"},
+    })
+         fetch_num=0
+        fetch_result=[]
+        fetch_result_num=0
+  }
+}
+
   } catch (error) {
     ctx.response({
       data: { result: 'ERROR' },
@@ -553,6 +590,8 @@ ctx.response({
 }
 const fetchData_text_1 = async (ctx,viewNumber) => {
   try {
+    if(fetch_num==0&&fetch_result_num==0){
+
   await fetch('https://edition.cnn.com'+newsLink[viewNumber])
   .then(response => response.text())
   .then(data => {
@@ -561,10 +600,37 @@ var splitTitle=data.split(/\"articleBody\":\"|\",\"author\"/);
 var resultContext=splitTitle[1]
 resultContext=resultContext.replaceAll("   ","\n\n");
 
+fetch_result_num= Math.ceil(resultContext.length/1111) 
+for(var sb=0;sb<fetch_result_num;sb++){
+  if(sb>=(fetch_result_num-2))
+fetch_result.push(resultContext.substring(sb*1111))  
+else
+fetch_result.push(resultContext.substring(sb*1111,(sb+1)*1111))//.replaceAll("　"," "))
+}
+fetch_result_num=fetch_result.length
+fetch_num++
+
 ctx.response({
-  data: { result: resultContext},
+  data: { result: fetch_result[0]},
 })
 });
+
+}else{
+  if(fetch_num<(fetch_result_num-1)){
+    ctx.response({
+      data: { result: fetch_result[fetch_num]},
+    })
+    fetch_num++
+  }else if(fetch_num==(fetch_result_num-1)){
+         ctx.response({
+      data: { result: "News_Finish"},
+    })
+         fetch_num=0
+        fetch_result=[]
+        fetch_result_num=0
+  }
+}
+
   } catch (error) {
     ctx.response({
       data: { result: 'ERROR' },
@@ -573,6 +639,7 @@ ctx.response({
 }
 const fetchData_text_2 = async (ctx,viewNumber) => {
   try {
+    if(fetch_num==0&&fetch_result_num==0){
   await fetch('https://www.nytimes.com/'+newsLink[viewNumber])
   .then(response => response.text())
   .then(data => {
@@ -592,10 +659,37 @@ resultContext=""
 for(var sb=0;sb<resultContextSplit.length;sb=sb+2){
  resultContext=resultContext+resultContextSplit[sb]
 }
+
+fetch_result_num= Math.ceil(resultContext.length/1111) 
+for(var sb=0;sb<fetch_result_num;sb++){
+  if(sb>=(fetch_result_num-2))
+fetch_result.push(resultContext.substring(sb*1111))  
+else
+fetch_result.push(resultContext.substring(sb*1111,(sb+1)*1111))//.replaceAll("　"," "))
+}
+fetch_result_num=fetch_result.length
+fetch_num++
+
 ctx.response({
-  data: { result: resultContext},
+  data: { result: fetch_result[0]},
 })
 });
+
+}else{
+  if(fetch_num<(fetch_result_num-1)){
+    ctx.response({
+      data: { result: fetch_result[fetch_num]},
+    })
+    fetch_num++
+  }else if(fetch_num==(fetch_result_num-1)){
+         ctx.response({
+      data: { result: "News_Finish"},
+    })
+         fetch_num=0
+        fetch_result=[]
+        fetch_result_num=0
+  }
+}
   } catch (error) {
     ctx.response({
       data: { result: 'ERROR' },
@@ -604,6 +698,7 @@ ctx.response({
 }
 const fetchData_text_3 = async (ctx,viewNumber) => {
   try {
+    if(fetch_num==0&&fetch_result_num==0){
   await fetch(newsLink[viewNumber])
   .then(response => response.text())
   .then(data => {
@@ -623,10 +718,37 @@ resultContext=""
 for(var sb=0;sb<resultContextSplit.length;sb=sb+2){
  resultContext=resultContext+resultContextSplit[sb]
 }
+fetch_result_num= Math.ceil(resultContext.length/1111) 
+for(var sb=0;sb<fetch_result_num;sb++){
+  if(sb>=(fetch_result_num-2))
+fetch_result.push(resultContext.substring(sb*1111))  
+else
+fetch_result.push(resultContext.substring(sb*1111,(sb+1)*1111))//.replaceAll("　"," "))
+}
+fetch_result_num=fetch_result.length
+fetch_num++
+
 ctx.response({
-  data: { result: resultContext},
+  data: { result: fetch_result[0]},
 })
 });
+
+}else{
+  if(fetch_num<(fetch_result_num-1)){
+    ctx.response({
+      data: { result: fetch_result[fetch_num]},
+    })
+    fetch_num++
+  }else if(fetch_num==(fetch_result_num-1)){
+         ctx.response({
+      data: { result: "News_Finish"},
+    })
+         fetch_num=0
+        fetch_result=[]
+        fetch_result_num=0
+  }
+}
+
   } catch (error) {
     ctx.response({
       data: { result: 'ERROR' },
@@ -704,13 +826,24 @@ AppSideService({
       }else if (jsonRpc.method === 'GET_NEWS_DATA_2_4') {
         return fetchData_text_2(ctx,4)
       }else if (jsonRpc.method === 'GET_NEWS_DATA_3_1') {
-        return fetchData_text_2(ctx,1)
+        return fetchData_text_3(ctx,1)
       }else if (jsonRpc.method === 'GET_NEWS_DATA_3_2') {
-        return fetchData_text_2(ctx,2)
+        return fetchData_text_3(ctx,2)
       }else if (jsonRpc.method === 'GET_NEWS_DATA_3_3') {
-        return fetchData_text_2(ctx,3)
+        return fetchData_text_3(ctx,3)
       }else if (jsonRpc.method === 'GET_NEWS_DATA_3_4') {
-        return fetchData_text_2(ctx,4)
+        return fetchData_text_3(ctx,4)
+      }else if (jsonRpc.method === 'FETCH_NEWS_CONTENT_STOP') {
+        fetch_num=0
+        fetch_result=[]
+        fetch_result_num=0
+        return "CLEAN SUCCESS"
+      }else if (jsonRpc.method === 'FETCH_NEWS_CONTENT_BACK') {
+        if(fetch_num==1)
+          fetch_num=0
+        else
+          fetch_num=fetch_num-2
+        return "BACK SUCCESS"
       }
     })
   },

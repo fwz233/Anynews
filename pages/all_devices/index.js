@@ -1,7 +1,3 @@
-import {
-  DEFAULT_COLOR,
-  DEFAULT_COLOR_TRANSPARENT,
-} from "../../utils/config/constants";
 import { DEVICE_WIDTH , DEVICE_HEIGHT } from "../../utils/config/device";
 import { readFileSync, writeFileSync } from '../../utils/config/fs';
 var screenState
@@ -23,7 +19,7 @@ var i18n= {
     "more_notic":"Please tell me the news platform you want to watch",
     "button_more": "Help",
     "button_setting": "About",
-    "titleName-00":"XDA",
+    "titleName-00":"Headlines",
     "titleName-01":"Mobile",
     "titleName-02":"Computing",
     "titleName-03":"Latest",
@@ -52,7 +48,7 @@ var i18n= {
     "more_notic":"请告诉我你想看的新闻平台",
     "button_more": "帮助",
     "button_setting": "关于",
-    "titleName-00":"XDA",
+    "titleName-00":"Headlines",
     "titleName-01":"Mobile",
     "titleName-02":"Computing",
     "titleName-03":"Latest",
@@ -111,8 +107,9 @@ Page({
       h: mpx_h(21),
       text_size: 49,
       radius: 45,
-      normal_color: DEFAULT_COLOR,
-      press_color: DEFAULT_COLOR_TRANSPARENT,
+      color:0x000000,
+      normal_color: 0xc0dfd7,
+      press_color: 0x8c9492,
       click_func: (button_widget) => {
         const nowPage=hmUI.getScrollCurrentPage()-2
         logger.log("click button and view"+nowPage);
@@ -156,7 +153,7 @@ Page({
      switch(newsTopic[newsTitle]){
         case "0":
         hmUI.showToast({
-          text:  getText('switch_topic_notic')+"XDA"
+          text:  getText('switch_topic_notic')+"Headlines"
         })
           break;
         case "1":
@@ -262,7 +259,7 @@ Page({
       radius: 45,
       color:0x000000,
       normal_color: getButtonColorTitle("0"),
-      press_color: DEFAULT_COLOR_TRANSPARENT,
+      press_color: 0x8c9492,
       click_func: (button_widget) => {
 
           newsTopic[newsTitle]="0"
@@ -283,7 +280,7 @@ Page({
     radius: 45,
     color:0x000000,
     normal_color: getButtonColorTitle("1"),
-    press_color: DEFAULT_COLOR_TRANSPARENT,
+    press_color: 0x8c9492,
     click_func: (button_widget) => {
 
         newsTopic[newsTitle]="1"
@@ -303,7 +300,7 @@ Page({
   radius: 45,
   color:0x000000,
   normal_color: getButtonColorTitle("2"),
-  press_color: DEFAULT_COLOR_TRANSPARENT,
+  press_color: 0x8c9492,
   click_func: (button_widget) => {
 
       newsTopic[newsTitle]="2"
@@ -323,7 +320,7 @@ Page({
   radius: 45,
   color:0x000000,
   normal_color: getButtonColorTitle("3"),
-  press_color: DEFAULT_COLOR_TRANSPARENT,
+  press_color: 0x8c9492,
   click_func: (button_widget) => {
 
       newsTopic[newsTitle]="3"
@@ -345,7 +342,7 @@ if(screenState==1){
       radius: 45-mpx_auto(3,DEVICE_WIDTH),
       color:0x000000,
       normal_color: getButtonColor(0),
-      press_color: 0xffffff,
+      press_color: 0x8c9492,
       click_func: (button_widget) => {
         if(newsTitle==0){
           switch (newsTopic[newsTitle]) {
@@ -390,7 +387,7 @@ if(screenState==1){
       radius: 45-mpx_auto(3,DEVICE_WIDTH),
       color:0x000000,
       normal_color: getButtonColor(1),
-      press_color: 0xffffff,
+      press_color: 0x8c9492,
       click_func: (button_widget) => {
         if(newsTitle==1){
           switch (newsTopic[newsTitle]) {
@@ -435,7 +432,7 @@ if(screenState==1){
       radius: 45-mpx_auto(3,DEVICE_WIDTH),
       color:0x000000,
       normal_color: getButtonColor(2),
-      press_color: 0xffffff,
+      press_color: 0x8c9492,
       click_func: (button_widget) => {
         if(newsTitle==2){
           switch (newsTopic[newsTitle]) {
@@ -480,7 +477,7 @@ if(screenState==1){
       radius: 45-mpx_auto(3,DEVICE_WIDTH),
       color:0x000000,
       normal_color: getButtonColor(3),
-      press_color: 0xffffff,
+      press_color: 0x8c9492,
       click_func: (button_widget) => {
         if(newsTitle==3){
           switch (newsTopic[newsTitle]) {
@@ -524,8 +521,8 @@ if(screenState==1){
       text_size: 41,
       radius: 54-mpx_auto(3,DEVICE_WIDTH),
       color:0x000000,
-      normal_color: 0xC0C0C0,
-      press_color: 0xffffff,
+      normal_color: 0x8c9492,
+      press_color: 0xc0dfd7,
       click_func: (button_widget) => {
         hmUI.showToast({
           text:  getText('more_notic')
@@ -541,8 +538,8 @@ if(screenState==1){
       text_size: 41,
       radius: 54-mpx_auto(3,DEVICE_WIDTH),
       color:0x000000,
-      normal_color: 0xC0C0C0,
-      press_color: 0xffffff,
+      normal_color: 0x8c9492,
+      press_color: 0xc0dfd7,
       click_func: (button_widget) => {
         if(loadingAnimation==false)
       hmApp.gotoPage({ file: 'pages/all_devices/about' })
@@ -559,7 +556,7 @@ if(screenState==1){
       radius: 45-mpx_auto(3,DEVICE_WIDTH),
       color:0x000000,
       normal_color: getButtonColor(0),
-      press_color: 0xffffff,
+      press_color: 0x8c9492,
       click_func: (button_widget) => {
         if(newsTitle==0){
           switch (newsTopic[newsTitle]) {
@@ -596,7 +593,7 @@ if(screenState==1){
       text:"XDA"
     });
     hmUI.createWidget(hmUI.widget.BUTTON, {
-      x: mpx_w(15+3+32.5),
+      x: mpx_w(15+3+37.5),
       y: mpx_h(15+50),
       w: mpx_w(32.5),
       h: mpx_h(20),
@@ -604,7 +601,7 @@ if(screenState==1){
       radius: 45-mpx_auto(3,DEVICE_WIDTH),
       color:0x000000,
       normal_color: getButtonColor(1),
-      press_color: 0xffffff,
+      press_color: 0x8c9492,
       click_func: (button_widget) => {
         if(newsTitle==1){
           switch (newsTopic[newsTitle]) {
@@ -649,7 +646,7 @@ if(screenState==1){
       radius: 45-mpx_auto(3,DEVICE_WIDTH),
       color:0x000000,
       normal_color: getButtonColor(2),
-      press_color: 0xffffff,
+      press_color: 0x8c9492,
       click_func: (button_widget) => {
         if(newsTitle==2){
           switch (newsTopic[newsTitle]) {
@@ -694,7 +691,7 @@ if(screenState==1){
       radius: 45-mpx_auto(3,DEVICE_WIDTH),
       color:0x000000,
       normal_color: getButtonColor(3),
-      press_color: 0xffffff,
+      press_color: 0x8c9492,
       click_func: (button_widget) => {
         if(newsTitle==3){
           switch (newsTopic[newsTitle]) {
@@ -738,8 +735,8 @@ if(screenState==1){
       text_size: 41,
       radius: 54-mpx_auto(3,DEVICE_WIDTH),
       color:0x000000,
-      normal_color: 0xC0C0C0,
-      press_color: 0xffffff,
+      normal_color: 0x8c9492,
+      press_color: 0xc0dfd7,
       click_func: (button_widget) => {
         hmUI.showToast({
           text:  getText('more_notic')
@@ -755,8 +752,8 @@ if(screenState==1){
       text_size: 41,
       radius: 54-mpx_auto(3,DEVICE_WIDTH),
       color:0x000000,
-      normal_color: 0xC0C0C0,
-      press_color: 0xffffff,
+      normal_color: 0x8c9492,
+      press_color: 0xc0dfd7,
       click_func: (button_widget) => {
         if(loadingAnimation==false)
       hmApp.gotoPage({ file: 'pages/all_devices/about' })
@@ -787,16 +784,16 @@ if(screenState==1){
 
     
 
-    //draw Loading animation
-    loadingAnimation = timer.createTimer(
-      2500,
-      500,
-      function (option) {
-        //callback
-        hmUI.scrollToPage((hmUI.getScrollCurrentPage()%5)+1, false)
-      },
-      { hour: 0, minute: 15, second: 30 }
-    )
+    // //draw Loading animation
+    // loadingAnimation = timer.createTimer(
+    //   2500,
+    //   500,
+    //   function (option) {
+    //     //callback
+    //     hmUI.scrollToPage((hmUI.getScrollCurrentPage()%5)+1, false)
+    //   },
+    //   { hour: 0, minute: 15, second: 30 }
+    // )
     
     
 
