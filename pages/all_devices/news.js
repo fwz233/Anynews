@@ -12,10 +12,12 @@ var i18n= {
   "1": {
     "more": "Loading...",
     "first_notic":"can't go any further",
+    "end":"\n\nDo you want to continue loading the next content?",
   },
   "0": {
     "more": "加载中...",
     "first_notic":"不能再往前了",
+    "end":"\n\n是否继续加载接下来的内容?",
   }
 }
 var newsNum,newsTitle;
@@ -118,121 +120,108 @@ Page({
       const  text = result
       logger.log(text)
   //News inish and reloadPage
-      if(text=="News_Finish"){
+      //if(text=="News_Finish"){=========================================================
 
 
-         var resultText
-      var pageNum=0,page=[0],nowPageNum=0
-      var calculateHeight
+        hmUI.setScrollView(true,DEVICE_HEIGHT,1,true)
+
+
+    if(text!="News_Finish"){  
+        resultAllText=text+getText('end');
+
+     
       const { width, height }= hmUI.getTextLayout(resultAllText, {
         text_size: 36,
-        text_width: DEVICE_WIDTH-108
+        text_width: DEVICE_WIDTH-mpx_w(10)
       })
-      var pagetTotal=Math.ceil(height/(mpx_h(90)-mpx_auto(10,DEVICE_HEIGHT)))-1,pageNow=1
-
-      do{
-      nowPageNum++
-      resultText=resultAllText.substring(pageNum,nowPageNum)
-      const { width, height }= hmUI.getTextLayout(resultText, {
-        text_size: 36,
-        text_width: DEVICE_WIDTH-108
-      })
-      calculateHeight=height
-      }while(calculateHeight<(mpx_h(90)-mpx_auto(10,DEVICE_HEIGHT)))
-      resultText=resultAllText.substring(pageNum,nowPageNum+36)
-      page.push(nowPageNum)
+      var lenghtResultAllText=Math.floor(height/(DEVICE_WIDTH-mpx_w(10)))-1
+      var pageNum=0;
       titleText.setProperty(hmUI.prop.MORE, {
+        x: mpx_w(5),
+        y: mpx_h(5),
+        w: DEVICE_WIDTH-mpx_w(10),
+        h: height,
         align_h:hmUI.align.LEFT,
         align_v:hmUI.align.TOP,
-        text:resultText
+        text:resultAllText
       })
-      pageNum=page.slice(-1)
-      nowPageNum=pageNum
 
-      hmUI.createWidget(hmUI.widget.BUTTON, {
-        x: -117,
-        y:0,
-        w: 166,
-        h: DEVICE_HEIGHT,
-        press_src: 'clickdown.png',
-        normal_src: 'stop.png',
-        click_func: (button_widget) => {
-          if(pageNow>1&&pageNow!=99999){
-            pageNow--
-            pageNum=page.pop()
-            pageNum=page.pop()
-            pageNum=page.slice(-1)
-            nowPageNum=pageNum
-            do{
-              nowPageNum++
-              resultText=resultAllText.substring(pageNum,nowPageNum)
-              const { width, height }= hmUI.getTextLayout(resultText, {
-                text_size: 36,
-                text_width: DEVICE_WIDTH-108
-              })
-              calculateHeight=height
-              }while(calculateHeight<(mpx_h(90)-mpx_auto(10,DEVICE_HEIGHT)))
-              resultText=resultAllText.substring(pageNum,nowPageNum+36)
-              page.push(nowPageNum)
+      // hmUI.createWidget(hmUI.widget.FILL_RECT, {
+      //   x: -1*mpx_h(10),
+      //   y:0,
+      //   w: DEVICE_WIDTH,
+      //   h: mpx_h(10),
+      //   radius: 0,
+      //   color: 0x000000
+      // })
+
+     
+      hmUI.createWidget(hmUI.widget.FILL_RECT, {
+        x: 0,
+        y:DEVICE_HEIGHT-72,
+        w: DEVICE_WIDTH,
+        h: 123,
+        radius: 0,
+        color: 0x000000
+      })
+
+        hmUI.createWidget(hmUI.widget.BUTTON, {
+            x: 0,
+            y:DEVICE_HEIGHT-72,
+            w: DEVICE_WIDTH/2,
+            h: 72,
+            press_src: 'clickdown.png',
+            normal_src: 'stop.png',
+            click_func: (button_widget) => {
+        if(pageNum!=0){
+          pageNum--
+          titleText.setProperty(hmUI.prop.MORE, {
+            x: mpx_w(5),
+            y: mpx_h(5)-(DEVICE_HEIGHT-72)*pageNum,
+            w: DEVICE_WIDTH-mpx_w(10),
+            h: height,
+            align_h:hmUI.align.LEFT,
+            align_v:hmUI.align.TOP,
+            text:resultAllText
+          })
+        }else{
+          hmUI.showToast({
+            text:  getText('first_notic')
+          })
+      }
+            },
+          })
+
+          hmUI.createWidget(hmUI.widget.BUTTON, {
+            x: DEVICE_WIDTH/2,
+            y:DEVICE_HEIGHT-72,
+            w: DEVICE_WIDTH/2,
+            h: 72,
+            press_src: 'clickdown.png',
+            normal_src: 'start.png',
+            click_func: (button_widget) => {
+              if(pageNum<lenghtResultAllText){
+                    pageNum++
               titleText.setProperty(hmUI.prop.MORE, {
-                align_h:hmUI.align.LEFT,
-                align_v:hmUI.align.TOP,
-                text:resultText
+                x: mpx_w(5),
+                y: mpx_h(5)-(DEVICE_HEIGHT-72)*pageNum,
+                w: DEVICE_WIDTH-mpx_w(10),
+                h: height, 
               })
-              pageNum=page.slice(-1)
-              nowPageNum=pageNum
-          }else if(pageNow==1){
-            hmUI.showToast({
-              text: getText('first_notic')
-            })
-          }
-        },
-      })
-      hmUI.createWidget(hmUI.widget.BUTTON, {
-        x: DEVICE_WIDTH-49,
-        y:0,
-        w: 166,
-        h: DEVICE_HEIGHT,
-        press_src: 'clickdown.png',
-        normal_src: 'start.png',
-        click_func: (button_widget) => {
-          if(pageNow<pagetTotal){
-
-              pageNow++
-              pageNum=pageNum-1
-              do{
-                nowPageNum++
-                resultText=resultAllText.substring(pageNum,nowPageNum)
-                const { width, height }= hmUI.getTextLayout(resultText, {
-                  text_size: 36,
-                  text_width: DEVICE_WIDTH-108
-                })
-                calculateHeight=height
-                }while(calculateHeight<(mpx_h(90)-mpx_auto(10,DEVICE_HEIGHT)))
-                resultText=resultAllText.substring(pageNum,nowPageNum+36)
-                page.push(nowPageNum)
-                titleText.setProperty(hmUI.prop.MORE, {
-                  align_h:hmUI.align.LEFT,
-                  align_v:hmUI.align.TOP,
-                  text:resultText
-                })
-                pageNum=page.slice(-1)
-                nowPageNum=pageNum
+              }else{
+                this.fetchData()
+              }
           
-          }else if(pageNow==pagetTotal){
-            resultText=resultAllText.substring(pageNum)
-            titleText.setProperty(hmUI.prop.MORE, {
-              align_h:hmUI.align.LEFT,
-              align_v:hmUI.align.TOP,
-              text:resultText
-            })
-            pageNow++
-            page.push(nowPageNum)
-          }else if(pageNow>pagetTotal){
-            hmApp.goBack()
-          }
-        },
-      })
+            },
+          })
+
+        }else{
+          // 页面返回
+hmApp.goBack()
+        }
+
+     
+    
       //function----
     function mpx_w(screenPx){
       screenPx=(screenPx/100)*DEVICE_WIDTH
@@ -260,12 +249,12 @@ Page({
       //what fuck code who wirte
       
       
-   } else{
+  //  } else{============================================================================
 
-    resultAllText=resultAllText+text
-    this.fetchData()
+  //   resultAllText=resultAllText+text
+  //   this.fetchData()
 
-    }
+  //   }=============================================================================
     })
   },
 });

@@ -9,15 +9,18 @@ var newsTitle,newsTopic
 var i18n= {
   "1": {
     "more": "See more",
-    "title1": "Loading.",
-    "title2": "Loading....",
-    "title3": "Loading..",
-    "title4": "Loading.....",
+    "title1": "Loading...",
+    "title2": "Loading...",
+    "title3": "Loading...",
+    "title4": "Loading...",
     "title5": "Loading...",
     "lod_notic":"One moment please",
     "switch_topic_notic":"Getting\n",
     "more_notic":"Please tell me the news platform you want to watch",
     "button_more": "Help",
+    "help1": "Click to view full text",
+    "help2": "Scroll down to settings",
+    "help3": "Swipe up to view more news",
     "button_setting": "About",
     "titleName-00":"Headlines",
     "titleName-01":"Mobile",
@@ -35,18 +38,23 @@ var i18n= {
     "titleName-31":"World",
     "titleName-32":"UK news",
     "titleName-33":"US news",
+    "about": "Developer: fwz233\nGithub homepage:\nhttps://github.com/fwz233\nFeedback email: fwz233@qq.com\nPlease tell me the news platform you need, or you can build and publish the news platform you want based on open source code",
+
   },
   "0": {
     "more": "查看更多",
-    "title1": "加载中.",
-    "title2": "加载中....",
-    "title3": "加载中..",
-    "title4": "加载中.....",
+    "title1": "加载中...",
+    "title2": "加载中...",
+    "title3": "加载中...",
+    "title4": "加载中...",
     "title5": "加载中...",
     "lod_notic":"请稍等",
     "switch_topic_notic":"正在获取\n",
     "more_notic":"请告诉我你想看的新闻平台",
     "button_more": "帮助",
+    "help1": "点击查看全文",
+    "help2": "下滑进入设置",
+    "help3": "上滑查看更多新闻",
     "button_setting": "关于",
     "titleName-00":"Headlines",
     "titleName-01":"Mobile",
@@ -64,6 +72,8 @@ var i18n= {
     "titleName-31":"World",
     "titleName-32":"UK news",
     "titleName-33":"US news",
+    "about": "开发者:fwz233\nGithub主页:\nhttps://github.com/fwz233\n反馈邮箱:fwz233@qq.com\n请告诉我你需要的新闻平台，或者你可以基于开源代码构建并发布你想要的新闻平台",
+
   }
 }
 Page({
@@ -99,17 +109,19 @@ Page({
     this.fetchData(newsTitle,newsTopic[newsTitle]);
 
     //draw Screen UI
+    
+if(screenState==1){
     for(var pageNum=1;pageNum<=5;pageNum++)
     hmUI.createWidget(hmUI.widget.BUTTON, {
-      x: mpx_w(10)+mpx_auto(10,DEVICE_WIDTH),
+      x: mpx_w(10),
       y: DEVICE_HEIGHT*pageNum+mpx_h(76),
-      w: mpx_w(80)-mpx_auto(20,DEVICE_WIDTH),
+      w: mpx_w(80),
       h: mpx_h(21),
       text_size: 49,
       radius: 45,
       color:0x000000,
       normal_color: 0xc0dfd7,
-      press_color: 0x8c9492,
+      press_color: 0xc0dfd7,
       click_func: (button_widget) => {
         const nowPage=hmUI.getScrollCurrentPage()-2
         logger.log("click button and view"+nowPage);
@@ -135,7 +147,44 @@ Page({
       text_style:hmUI.text_style.WRAP,
       text:getText("title"+pageNum)
     }))
-
+  }else{
+    for(var pageNum=1;pageNum<=5;pageNum++)
+    hmUI.createWidget(hmUI.widget.BUTTON, {
+      x: mpx_w(15),
+      y: DEVICE_HEIGHT*pageNum+mpx_h(15+49),
+      w: mpx_w(80),
+      h: mpx_h(21),
+      text_size: 49,
+      radius: 45,
+      color:0x000000,
+      normal_color: 0xc0dfd7,
+      press_color: 0xc0dfd7,
+      click_func: (button_widget) => {
+        const nowPage=hmUI.getScrollCurrentPage()-2
+        logger.log("click button and view"+nowPage);
+        if(loadingAnimation==false){
+          writeFileSync(nowPage, false,'newsNum')
+          var titleTextStr= titleText[0].getProperty(hmUI.prop.TEXT)
+          logger.log("click button and view"+titleTextStr);
+          hmApp.gotoPage({ file: 'pages/all_devices/news' })
+        }
+      },
+      text:getText("more")
+    });
+    for(var pageNum=1;pageNum<=5;pageNum++)
+    titleText.push(hmUI.createWidget(hmUI.widget.TEXT, {
+      x: mpx_w(7),
+      y: DEVICE_HEIGHT*pageNum+mpx_h(15),
+      w: mpx_w(86),
+      h: mpx_h(49),
+      color: 0xffffff,
+      text_size: 36,
+      align_h: hmUI.align.CENTER_H,
+      align_v: hmUI.align.CENTER_V,
+      text_style:hmUI.text_style.WRAP,
+      text:getText("title"+pageNum)
+    }))
+  }
 
 
 
@@ -250,16 +299,19 @@ Page({
           console.log("switch news topic");
           break;
      }
+
+
+     if(screenState==1){
   hmUI.createWidget(hmUI.widget.BUTTON, {
-      x: mpx_w(10)+mpx_auto(10,DEVICE_WIDTH),
+      x: mpx_w(10),
       y: DEVICE_HEIGHT*6+mpx_h(4)+mpx_h(24)*0,
-      w: mpx_w(80)-mpx_auto(20,DEVICE_WIDTH),
+      w: mpx_w(80),
       h: mpx_h(20),
       text_size: 49,
       radius: 45,
       color:0x000000,
       normal_color: getButtonColorTitle("0"),
-      press_color: 0x8c9492,
+      press_color: 0xc0dfd7,
       click_func: (button_widget) => {
 
           newsTopic[newsTitle]="0"
@@ -272,15 +324,15 @@ Page({
       text: getText("titleName-"+newsTitle+0)
   });
   hmUI.createWidget(hmUI.widget.BUTTON, {
-    x: mpx_w(10)+mpx_auto(10,DEVICE_WIDTH),
+    x: mpx_w(10),
     y: DEVICE_HEIGHT*6+mpx_h(4)+mpx_h(24)*1,
-    w: mpx_w(80)-mpx_auto(20,DEVICE_WIDTH),
+    w: mpx_w(80),
     h: mpx_h(20),
     text_size: 49,
     radius: 45,
     color:0x000000,
     normal_color: getButtonColorTitle("1"),
-    press_color: 0x8c9492,
+    press_color: 0xc0dfd7,
     click_func: (button_widget) => {
 
         newsTopic[newsTitle]="1"
@@ -292,15 +344,15 @@ Page({
     },
     text: getText("titleName-"+newsTitle+1)
 }); hmUI.createWidget(hmUI.widget.BUTTON, {
-  x: mpx_w(10)+mpx_auto(10,DEVICE_WIDTH),
+  x: mpx_w(10),
   y: DEVICE_HEIGHT*6+mpx_h(4)+mpx_h(24)*2,
-  w: mpx_w(80)-mpx_auto(20,DEVICE_WIDTH),
+  w: mpx_w(80),
   h: mpx_h(20),
   text_size: 49,
   radius: 45,
   color:0x000000,
   normal_color: getButtonColorTitle("2"),
-  press_color: 0x8c9492,
+  press_color: 0xc0dfd7,
   click_func: (button_widget) => {
 
       newsTopic[newsTitle]="2"
@@ -312,15 +364,15 @@ Page({
   },
   text: getText("titleName-"+newsTitle+2)
 }); hmUI.createWidget(hmUI.widget.BUTTON, {
-  x: mpx_w(10)+mpx_auto(10,DEVICE_WIDTH),
+  x: mpx_w(10),
   y: DEVICE_HEIGHT*6+mpx_h(4)+mpx_h(24)*3,
-  w: mpx_w(80)-mpx_auto(20,DEVICE_WIDTH),
+  w: mpx_w(80),
   h: mpx_h(20),
   text_size: 49,
   radius: 45,
   color:0x000000,
   normal_color: getButtonColorTitle("3"),
-  press_color: 0x8c9492,
+  press_color: 0xc0dfd7,
   click_func: (button_widget) => {
 
       newsTopic[newsTitle]="3"
@@ -332,17 +384,107 @@ Page({
   },
   text: getText("titleName-"+newsTitle+3)
 });
+     }else{//--------------------------------------------------------------------------------
+      hmUI.createWidget(hmUI.widget.BUTTON, {
+        x: mpx_w(15),
+        y: DEVICE_HEIGHT*6+mpx_h(15+3)+mpx_h(16)*0,
+        w: mpx_w(70),
+        h: mpx_h(15),
+        text_size: 49,
+        radius: 45,
+        color:0x000000,
+        normal_color: getButtonColorTitle("0"),
+        press_color: 0xc0dfd7,
+        click_func: (button_widget) => {
+  
+            newsTopic[newsTitle]="0"
+            var newsTopicStr=newsTopic[0]+"?"+newsTopic[1]+"?"+newsTopic[2]+"?"+newsTopic[3]
+            writeFileSync(newsTopicStr, false,'newsTopic')
+        
+        timer.stopTimer(loadingAnimation)
+        hmApp.reloadPage({ file: 'pages/all_devices/index' })
+        },
+        text: getText("titleName-"+newsTitle+0)
+    });
+    hmUI.createWidget(hmUI.widget.BUTTON, {
+      x: mpx_w(15),
+      y: DEVICE_HEIGHT*6+mpx_h(15+3)+mpx_h(16)*1,
+      w: mpx_w(70),
+      h: mpx_h(15),
+      text_size: 49,
+      radius: 45,
+      color:0x000000,
+      normal_color: getButtonColorTitle("1"),
+      press_color: 0xc0dfd7,
+      click_func: (button_widget) => {
+  
+          newsTopic[newsTitle]="1"
+          var newsTopicStr=newsTopic[0]+"?"+newsTopic[1]+"?"+newsTopic[2]+"?"+newsTopic[3]
+          writeFileSync(newsTopicStr, false,'newsTopic')
+      
+      timer.stopTimer(loadingAnimation)
+      hmApp.reloadPage({ file: 'pages/all_devices/index' })
+      },
+      text: getText("titleName-"+newsTitle+1)
+  }); hmUI.createWidget(hmUI.widget.BUTTON, {
+    x: mpx_w(15),
+    y: DEVICE_HEIGHT*6+mpx_h(15+3)+mpx_h(16)*2,
+    w: mpx_w(70),
+    h: mpx_h(15),
+    text_size: 49,
+    radius: 45,
+    color:0x000000,
+    normal_color: getButtonColorTitle("2"),
+    press_color: 0xc0dfd7,
+    click_func: (button_widget) => {
+  
+        newsTopic[newsTitle]="2"
+        var newsTopicStr=newsTopic[0]+"?"+newsTopic[1]+"?"+newsTopic[2]+"?"+newsTopic[3]
+        writeFileSync(newsTopicStr, false,'newsTopic')
+    
+    timer.stopTimer(loadingAnimation)
+    hmApp.reloadPage({ file: 'pages/all_devices/index' })
+    },
+    text: getText("titleName-"+newsTitle+2)
+  }); hmUI.createWidget(hmUI.widget.BUTTON, {
+    x: mpx_w(15),
+    y: DEVICE_HEIGHT*6+mpx_h(15+3)+mpx_h(16)*3,
+    w: mpx_w(70),
+    h: mpx_h(15),
+    text_size: 49,
+    radius: 45,
+    color:0x000000,
+    normal_color: getButtonColorTitle("3"),
+    press_color: 0xc0dfd7,
+    click_func: (button_widget) => {
+  
+        newsTopic[newsTitle]="3"
+        var newsTopicStr=newsTopic[0]+"?"+newsTopic[1]+"?"+newsTopic[2]+"?"+newsTopic[3]
+        writeFileSync(newsTopicStr, false,'newsTopic')
+    
+    timer.stopTimer(loadingAnimation)
+    hmApp.reloadPage({ file: 'pages/all_devices/index' })
+    },
+    text: getText("titleName-"+newsTitle+3)
+  });
+     }
+
+
+
+
+
+
 if(screenState==1){
     var button= hmUI.createWidget(hmUI.widget.BUTTON, {
-      x: mpx_w(10)+mpx_auto(9,DEVICE_WIDTH),
+      x: mpx_w(10),
       y: mpx_h(70),
-      w: mpx_w(36)-mpx_auto(9,DEVICE_WIDTH),
+      w: mpx_w(36),
       h: mpx_h(25),
       text_size: 45,
-      radius: 45-mpx_auto(3,DEVICE_WIDTH),
+      radius: 45,
       color:0x000000,
       normal_color: getButtonColor(0),
-      press_color: 0x8c9492,
+      press_color: 0xc0dfd7,
       click_func: (button_widget) => {
         if(newsTitle==0){
           switch (newsTopic[newsTitle]) {
@@ -381,13 +523,13 @@ if(screenState==1){
     hmUI.createWidget(hmUI.widget.BUTTON, {
       x: mpx_w(54),
       y: mpx_h(70),
-      w: mpx_w(36)-mpx_auto(9,DEVICE_WIDTH),
+      w: mpx_w(36),
       h: mpx_h(25),
       text_size: 45,
-      radius: 45-mpx_auto(3,DEVICE_WIDTH),
+      radius: 45,
       color:0x000000,
       normal_color: getButtonColor(1),
-      press_color: 0x8c9492,
+      press_color: 0xc0dfd7,
       click_func: (button_widget) => {
         if(newsTitle==1){
           switch (newsTopic[newsTitle]) {
@@ -424,15 +566,15 @@ if(screenState==1){
       text:"CNN"
     });
     hmUI.createWidget(hmUI.widget.BUTTON, {
-      x: mpx_w(10)+mpx_auto(9,DEVICE_WIDTH),
+      x: mpx_w(10),
       y: mpx_h(40),
-      w: mpx_w(36)-mpx_auto(9,DEVICE_WIDTH),
+      w: mpx_w(36),
       h: mpx_h(25),
       text_size: 45,
-      radius: 45-mpx_auto(3,DEVICE_WIDTH),
+      radius: 45,
       color:0x000000,
       normal_color: getButtonColor(2),
-      press_color: 0x8c9492,
+      press_color: 0xc0dfd7,
       click_func: (button_widget) => {
         if(newsTitle==2){
           switch (newsTopic[newsTitle]) {
@@ -471,13 +613,13 @@ if(screenState==1){
     hmUI.createWidget(hmUI.widget.BUTTON, {
       x: mpx_w(54),
       y: mpx_h(40),
-      w: mpx_w(36)-mpx_auto(9,DEVICE_WIDTH),
+      w: mpx_w(36),
       h: mpx_h(25),
       text_size: 45,
-      radius: 45-mpx_auto(3,DEVICE_WIDTH),
+      radius: 45,
       color:0x000000,
       normal_color: getButtonColor(3),
-      press_color: 0x8c9492,
+      press_color: 0xc0dfd7,
       click_func: (button_widget) => {
         if(newsTitle==3){
           switch (newsTopic[newsTitle]) {
@@ -514,36 +656,33 @@ if(screenState==1){
       text:"TG"
     });
     hmUI.createWidget(hmUI.widget.BUTTON, {
-      x: mpx_w(10)+mpx_auto(9,DEVICE_WIDTH),
+      x: mpx_w(10),
       y: mpx_h(10),
-      w: mpx_w(36)-mpx_auto(9,DEVICE_WIDTH),
+      w: mpx_w(36),
       h: mpx_h(25),
       text_size: 41,
-      radius: 54-mpx_auto(3,DEVICE_WIDTH),
+      radius: 45,
       color:0x000000,
-      normal_color: 0x8c9492,
+      normal_color: getButtonColor(3),
       press_color: 0xc0dfd7,
       click_func: (button_widget) => {
-        hmUI.showToast({
-          text:  getText('more_notic')
-        })
+          HelpPage()
       },
       text:getText("button_more")
     });
     hmUI.createWidget(hmUI.widget.BUTTON, {
       x: mpx_w(54),
       y: mpx_h(10),
-      w: mpx_w(36)-mpx_auto(9,DEVICE_WIDTH),
+      w: mpx_w(36),
       h: mpx_h(25),
       text_size: 41,
-      radius: 54-mpx_auto(3,DEVICE_WIDTH),
+      radius: 45,
       color:0x000000,
-      normal_color: 0x8c9492,
+      normal_color: getButtonColor(3),
       press_color: 0xc0dfd7,
       click_func: (button_widget) => {
-        if(loadingAnimation==false)
-      hmApp.gotoPage({ file: 'pages/all_devices/about' })
-      },
+        SettingPage()
+        },
       text:getText("button_setting")
     });
   }else{//--------------------------------------------------------------------sbUI----------------------------------
@@ -556,7 +695,7 @@ if(screenState==1){
       radius: 45-mpx_auto(3,DEVICE_WIDTH),
       color:0x000000,
       normal_color: getButtonColor(0),
-      press_color: 0x8c9492,
+      press_color: 0xc0dfd7,
       click_func: (button_widget) => {
         if(newsTitle==0){
           switch (newsTopic[newsTitle]) {
@@ -601,7 +740,7 @@ if(screenState==1){
       radius: 45-mpx_auto(3,DEVICE_WIDTH),
       color:0x000000,
       normal_color: getButtonColor(1),
-      press_color: 0x8c9492,
+      press_color: 0xc0dfd7,
       click_func: (button_widget) => {
         if(newsTitle==1){
           switch (newsTopic[newsTitle]) {
@@ -646,7 +785,7 @@ if(screenState==1){
       radius: 45-mpx_auto(3,DEVICE_WIDTH),
       color:0x000000,
       normal_color: getButtonColor(2),
-      press_color: 0x8c9492,
+      press_color: 0xc0dfd7,
       click_func: (button_widget) => {
         if(newsTitle==2){
           switch (newsTopic[newsTitle]) {
@@ -691,7 +830,7 @@ if(screenState==1){
       radius: 45-mpx_auto(3,DEVICE_WIDTH),
       color:0x000000,
       normal_color: getButtonColor(3),
-      press_color: 0x8c9492,
+      press_color: 0xc0dfd7,
       click_func: (button_widget) => {
         if(newsTitle==3){
           switch (newsTopic[newsTitle]) {
@@ -733,14 +872,12 @@ if(screenState==1){
       w: mpx_w(32.5),
       h: mpx_h(20),
       text_size: 41,
-      radius: 54-mpx_auto(3,DEVICE_WIDTH),
+      radius: 45-mpx_auto(3,DEVICE_WIDTH),
       color:0x000000,
-      normal_color: 0x8c9492,
+      normal_color: getButtonColor(3),
       press_color: 0xc0dfd7,
       click_func: (button_widget) => {
-        hmUI.showToast({
-          text:  getText('more_notic')
-        })
+        HelpPage()
       },
       text:getText("button_more")
     });
@@ -750,20 +887,303 @@ if(screenState==1){
       w: mpx_w(32.5),
       h: mpx_h(20),
       text_size: 41,
-      radius: 54-mpx_auto(3,DEVICE_WIDTH),
+      radius: 45-mpx_auto(3,DEVICE_WIDTH),
       color:0x000000,
-      normal_color: 0x8c9492,
+      normal_color: getButtonColor(3),
       press_color: 0xc0dfd7,
       click_func: (button_widget) => {
-        if(loadingAnimation==false)
-      hmApp.gotoPage({ file: 'pages/all_devices/about' })
+        SettingPage()
       },
       text:getText("button_setting")
     });
   }
 
 
+  function HelpPage(){
+    hmUI.setScrollView(true,DEVICE_HEIGHT,8,true)//7
+    hmUI.scrollToPage(7, false)
+  hmUI.createWidget(hmUI.widget.IMG, {
+      x: mpx_w(50)-32,
+      y: DEVICE_HEIGHT*7+mpx_h(40),
+      src: 'touch.png'
+    })
+    hmUI.createWidget(hmUI.widget.TEXT, {
+      x: 0,
+      y: DEVICE_HEIGHT*7+mpx_h(40)+64,
+      w: mpx_w(100),
+      h: 46,
+      color: 0xffffff,
+      text_size: 36,
+      align_h: hmUI.align.CENTER_H,
+      align_v: hmUI.align.CENTER_V,
+      text_style: hmUI.text_style.NONE,
+      text: getText("help1")
+    })
+    hmUI.createWidget(hmUI.widget.IMG, {
+      x: mpx_w(50)-32,
+      y: DEVICE_HEIGHT*7+mpx_h(5),
+      src: 'down.png'
+    })
+    hmUI.createWidget(hmUI.widget.TEXT, {
+      x: 0,
+      y: DEVICE_HEIGHT*7+mpx_h(5)+64,
+      w: mpx_w(100),
+      h: 46,
+      color: 0xffffff,
+      text_size: 36,
+      align_h: hmUI.align.CENTER_H,
+      align_v: hmUI.align.CENTER_V,
+      text_style: hmUI.text_style.NONE,
+      text: getText("help2")
+    })
+    hmUI.createWidget(hmUI.widget.IMG, {
+      x: mpx_w(50)-32,
+      y: DEVICE_HEIGHT*7+mpx_h(85),
+      src: 'up.png'
+    })
+    hmUI.createWidget(hmUI.widget.TEXT, {
+      x: 0,
+      y: DEVICE_HEIGHT*7+mpx_h(85)-46,
+      w: mpx_w(100),
+      h: 46,
+      color: 0xffffff,
+      text_size: 36,
+      align_h: hmUI.align.CENTER_H,
+      align_v: hmUI.align.CENTER_V,
+      text_style: hmUI.text_style.NONE,
+      text: getText("help3")
+    })
 
+    hmApp.registerGestureEvent(function (event) {
+      let msg = 'none'
+      switch (event) {
+        case hmApp.gesture.UP:
+          msg = 'up'
+          break
+        case hmApp.gesture.DOWN:
+          msg = 'down'
+          break
+        case hmApp.gesture.LEFT:
+          msg = 'left'
+          break
+        case hmApp.gesture.RIGHT:
+          msg = 'right'
+          break
+        default:
+          break
+      }
+      console.log(`receive gesture event ${msg}`)
+    
+      // 取消注册手势监听
+      hmApp.unregisterGestureEvent()
+      //取消注册按键监听
+      hmApp.unregisterKeyEvent();
+      //取消注册按键监听
+      hmApp.unregisterSpinEvent()
+      hmUI.scrollToPage(1, false)
+      hmUI.setScrollView(true,DEVICE_HEIGHT,7,true)
+  
+
+      //不跳过默认手势
+      return ture
+    })
+//注册按键监听 一个JsApp重复注册会导致上一个注册的回调失效
+hmApp.registerKeyEvent(function (key, action) {
+  console.log('receive key code:' + code + ' action:' + action)
+  let msg = ''
+  let ret = true 
+  switch (key) {
+    case hmApp.key.BACK:
+      msg = 'back.'
+      break
+    case hmApp.key.SELECT:
+      msg = 'select.'
+      break
+    case hmApp.key.HOME:
+      msg = 'home.'
+      ret = true  //跳过默认 home键处理
+      break
+    case hmApp.key.UP:
+      msg = 'up.'
+      break
+    case hmApp.key.DOWN:
+      msg = 'down.'
+      break
+    case hmApp.key.SHORTCUT:
+      msg = 'shortcut.'
+      break
+    default:
+      msg = 'none.'
+      break
+  }
+
+  switch (action) {
+    case hmApp.action.CLICK:
+      msg = msg + 'click'
+      break
+    case hmApp.action.LONG_PRESS:
+      msg = msg + 'longPress'
+      break
+    case hmApp.action.DOUBLE_CLICK:
+      msg = msg + 'doubleClick'
+      break
+    case hmApp.action.RELEASE:
+      msg = msg + 'release'
+      break
+    case hmApp.action.PRESS:
+      msg = msg + 'press'
+      break
+    default:
+      msg = msg + 'none'
+      break
+  }
+
+  console.log('receive key:' + msg)
+      // 取消注册手势监听
+      hmApp.unregisterGestureEvent()
+      //取消注册按键监听
+      hmApp.unregisterKeyEvent();
+      //取消注册按键监听
+      hmApp.unregisterSpinEvent()
+      hmUI.scrollToPage(1, false)
+      hmUI.setScrollView(true,DEVICE_HEIGHT,7,true)
+  return ret
+})
+hmApp.registerSpinEvent(function (key, degree) {
+  console.log('receive key:' + key + ' degree:' + degree) //这里的 key 目前只能是 HOME，可以不用判断
+        // 取消注册手势监听
+        hmApp.unregisterGestureEvent()
+        //取消注册按键监听
+        hmApp.unregisterKeyEvent();
+        //取消注册按键监听
+        hmApp.unregisterSpinEvent()
+        hmUI.scrollToPage(1, false)
+        hmUI.setScrollView(true,DEVICE_HEIGHT,7,true)
+})
+  }
+  function SettingPage(){
+    hmUI.setScrollView(true,DEVICE_HEIGHT,9,true)//7
+    hmUI.scrollToPage(8, false)
+
+    hmUI.createWidget(hmUI.widget.TEXT, {
+      x: mpx_w(0),
+      y: DEVICE_HEIGHT*8+mpx_h(15),
+      w: mpx_w(100),
+      h: mpx_w(85),
+      color: 0xffffff,
+      text_size: 29,
+      align_h: hmUI.align.CENTER_H,
+      align_v: hmUI.align.CENTER_V,
+      text_style:hmUI.text_style.WRAP,
+      text:getText("about")
+    })
+    hmApp.registerGestureEvent(function (event) {
+      let msg = 'none'
+      switch (event) {
+        case hmApp.gesture.UP:
+          msg = 'up'
+          break
+        case hmApp.gesture.DOWN:
+          msg = 'down'
+          break
+        case hmApp.gesture.LEFT:
+          msg = 'left'
+          break
+        case hmApp.gesture.RIGHT:
+          msg = 'right'
+          break
+        default:
+          break
+      }
+      console.log(`receive gesture event ${msg}`)
+    
+      // 取消注册手势监听
+      hmApp.unregisterGestureEvent()
+      //取消注册按键监听
+      hmApp.unregisterKeyEvent();
+      //取消注册按键监听
+      hmApp.unregisterSpinEvent()
+      hmUI.scrollToPage(1, false)
+      hmUI.setScrollView(true,DEVICE_HEIGHT,7,true)
+  
+
+      //不跳过默认手势
+      return ture
+    })
+//注册按键监听 一个JsApp重复注册会导致上一个注册的回调失效
+hmApp.registerKeyEvent(function (key, action) {
+  console.log('receive key code:' + code + ' action:' + action)
+  let msg = ''
+  let ret = true 
+  switch (key) {
+    case hmApp.key.BACK:
+      msg = 'back.'
+      break
+    case hmApp.key.SELECT:
+      msg = 'select.'
+      break
+    case hmApp.key.HOME:
+      msg = 'home.'
+      ret = true  //跳过默认 home键处理
+      break
+    case hmApp.key.UP:
+      msg = 'up.'
+      break
+    case hmApp.key.DOWN:
+      msg = 'down.'
+      break
+    case hmApp.key.SHORTCUT:
+      msg = 'shortcut.'
+      break
+    default:
+      msg = 'none.'
+      break
+  }
+
+  switch (action) {
+    case hmApp.action.CLICK:
+      msg = msg + 'click'
+      break
+    case hmApp.action.LONG_PRESS:
+      msg = msg + 'longPress'
+      break
+    case hmApp.action.DOUBLE_CLICK:
+      msg = msg + 'doubleClick'
+      break
+    case hmApp.action.RELEASE:
+      msg = msg + 'release'
+      break
+    case hmApp.action.PRESS:
+      msg = msg + 'press'
+      break
+    default:
+      msg = msg + 'none'
+      break
+  }
+
+  console.log('receive key:' + msg)
+      // 取消注册手势监听
+      hmApp.unregisterGestureEvent()
+      //取消注册按键监听
+      hmApp.unregisterKeyEvent();
+      //取消注册按键监听
+      hmApp.unregisterSpinEvent()
+      hmUI.scrollToPage(1, false)
+      hmUI.setScrollView(true,DEVICE_HEIGHT,7,true)
+  return ret
+})
+hmApp.registerSpinEvent(function (key, degree) {
+  console.log('receive key:' + key + ' degree:' + degree) //这里的 key 目前只能是 HOME，可以不用判断
+        // 取消注册手势监听
+        hmApp.unregisterGestureEvent()
+        //取消注册按键监听
+        hmApp.unregisterKeyEvent();
+        //取消注册按键监听
+        hmApp.unregisterSpinEvent()
+        hmUI.scrollToPage(1, false)
+        hmUI.setScrollView(true,DEVICE_HEIGHT,7,true)
+})
+  }
 
 
 
@@ -821,24 +1241,32 @@ if(screenState==1){
           str=i18n[0][str]
       return str
     }
-    //getButtonColor() view selected button
+    //getButtonColor() view selected button  
     function getButtonColor(buttonNum){
       if(buttonNum==newsTitle)
-        return 0x8c9492;
-      else
         return 0xc0dfd7;
+      else
+        return 0x8c9492;
     }
     function getButtonColorTitle(buttonNum){
       if(buttonNum==newsTopic[newsTitle])
-        return 0x8c9492;
-      else
         return 0xc0dfd7;
+      else
+        return 0x8c9492;
     }
   },onDestory() {
       //setScreenKeep-Zepp
       hmApp.setScreenKeep(false)
       //stop loadingAnimation
       timer.stopTimer(loadingAnimation)
+
+
+      // 取消注册手势监听
+hmApp.unregisterGestureEvent()
+//取消注册按键监听
+hmApp.unregisterKeyEvent();
+//取消注册按键监听
+hmApp.unregisterSpinEvent()
   },
   fetchData(newsTitle,newsTopic) {
     messageBuilder.request({
@@ -849,11 +1277,21 @@ if(screenState==1){
       const { result = {} } = data
       const  text = result
 
+      // 取消注册手势监听
+      hmApp.unregisterGestureEvent()
+      //取消注册按键监听
+      hmApp.unregisterKeyEvent();
+      //取消注册按键监听
+      hmApp.unregisterSpinEvent()
+  //...stop help page control (It's my sb code)
+      hmUI.setScrollView(true,DEVICE_HEIGHT,7,true)
+
       //stop loadingAnimation
       timer.stopTimer(loadingAnimation)
       loadingAnimation=false
       //scrollToPage-Zepp
       hmUI.scrollToPage(1, true)
+    
 
       var resultText=text.split("fwz233");
       for(var pageNum=0;pageNum<5;pageNum++){
@@ -871,12 +1309,64 @@ if(screenState==1){
       w: mpx_w(100),
       h: mpx_h(15),
       text_size: 36,
+      normal_src:"setting_mini.png",
+      press_src:"setting_mini_press.png",
       click_func: (button_widget) => {
       //scrollToPage-Zepp
       hmUI.scrollToPage(0, true)
       },
-      text:pageNum+"/5"
     })
+    for(var pageNum=1;pageNum<=5;pageNum++){
+      hmUI.createWidget(hmUI.widget.CIRCLE, {
+        center_x: mpx_w(96)-mpx_auto(2,DEVICE_WIDTH),
+        center_y: mpx_h(100)*pageNum+mpx_h(50-1-3-1-3),
+        radius: 3,
+        color: 0x808080,
+        alpha: 255
+      })
+      hmUI.createWidget(hmUI.widget.CIRCLE, {
+        center_x: mpx_w(96)-mpx_auto(1,DEVICE_WIDTH),
+        center_y: mpx_h(100)*pageNum+mpx_h(50-1-3),
+        radius: 3,
+        color: 0x808080,
+        alpha: 255
+      })
+      hmUI.createWidget(hmUI.widget.CIRCLE, {
+        center_x: mpx_w(96)-mpx_auto(0.8,DEVICE_WIDTH),
+        center_y: mpx_h(100)*pageNum+mpx_h(50),
+        radius: 3,
+        color: 0x808080,
+        alpha: 255
+      })
+      hmUI.createWidget(hmUI.widget.CIRCLE, {
+        center_x: mpx_w(96)-mpx_auto(1,DEVICE_WIDTH),
+        center_y: mpx_h(100)*pageNum+mpx_h(50+1+3),
+        radius: 3,
+        color: 0x808080,
+        alpha: 255
+      })
+      hmUI.createWidget(hmUI.widget.CIRCLE, {
+        center_x: mpx_w(96)-mpx_auto(2,DEVICE_WIDTH),
+        center_y: mpx_h(100)*pageNum+mpx_h(50+1+3+1+3),
+        radius: 3,
+        color: 0x808080,
+        alpha: 255
+      })
+    }
+    for(var pageNum=1;pageNum<=5;pageNum++)
+      hmUI.createWidget(hmUI.widget.CIRCLE, {
+        center_x: mpx_w(96)-mpx_auto(Math.abs(3-pageNum)+sbbbbb(pageNum),DEVICE_WIDTH),
+        center_y: mpx_h(100)*pageNum+mpx_h(38+(1+3)*pageNum),
+        radius: 3,
+        color: 0xffffff,
+        alpha: 255
+      })
+      function sbbbbb(sbbb){
+        if(sbbb==3)
+        return 0.8
+        else
+        return 0
+      }
      //function----
      function mpx_w(screenPx){
       screenPx=(screenPx/100)*DEVICE_WIDTH
@@ -887,7 +1377,7 @@ if(screenState==1){
       return screenPx
     }
     function mpx_auto(screenPx,devicePx){
-      if(screenState==1)
+      if(screenState==0)
       screenPx=(screenPx/100)*DEVICE_HEIGHT
       else
       screenPx=0
