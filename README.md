@@ -3,10 +3,10 @@
 
 计划新闻平台
 
-[it之家]:(https://it.ithome.com/)
+[it之家](https://it.ithome.com/)
 
-[少数派]:(https://sspai.com/)
+[少数派](https://sspai.com/)
 
-[财新网]:(https://www.caixin.com/)
+[财新网](https://www.caixin.com/)
 
-[三联]:(https://www.lifeweek.com.cn/)
+[三联](https://www.lifeweek.com.cn/)
