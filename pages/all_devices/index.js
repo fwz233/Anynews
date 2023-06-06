@@ -6,14 +6,7 @@ const { messageBuilder } = getApp()._options.globalData;
 var titleText=[]
 var loadingAnimation,getTitleOK=true
 var newsTitle,newsTopic
-// ,{
-//   "name": "gts4-mini",
-//   "deviceSource": 246
-// },
-// {
-//   "name": "gts4-miniw",
-//   "deviceSource": 247
-// }
+
 // ,
 //         {
 //           "name": "band71",
