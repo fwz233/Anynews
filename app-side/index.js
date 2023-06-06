@@ -89,12 +89,12 @@ const fetchData_1 = async (ctx) => {
 
 var splitTopic=data.split("Featured Mobile")
 
-var splitRes=splitTopic[1].split("<h3 class=\"bc-title\">");//·-datetime
+var splitRes=splitTopic[1].split("<h5 class=\"display-card-title\">");//·-datetime
 var resultContext=""
 for(var sb=1;sb<=5;sb++){
-var splitContext=splitRes[sb].split(/href=\"|\" class=\"|>|<\/a>/)
+var splitContext=splitRes[sb].split(/href=\"|\">|<\/a>/)
   newsLink[sb-1]=splitContext[1]
-  splitContext=splitContext[1]+"fwz233"+splitContext[3]
+  splitContext=splitContext[1]+"fwz233"+splitContext[2]
   resultContext=resultContext+"fwz233"+splitContext
 }
 resultContext=resultContext.replaceAll("&amp;","&");
@@ -117,12 +117,12 @@ const fetchData_2 = async (ctx) => {
 
 var splitTopic=data.split("Featured Computing")
 
-var splitRes=splitTopic[1].split("<h3 class=\"bc-title\">");//·-datetime
+var splitRes=splitTopic[1].split("<h5 class=\"display-card-title\">");//·-datetime
 var resultContext=""
 for(var sb=1;sb<=5;sb++){
-var splitContext=splitRes[sb].split(/href=\"|\" class=\"|>|<\/a>/)
+var splitContext=splitRes[sb].split(/href=\"|\">|<\/a>/)
   newsLink[sb-1]=splitContext[1]
-  splitContext=splitContext[1]+"fwz233"+splitContext[3]
+  splitContext=splitContext[1]+"fwz233"+splitContext[2]
   resultContext=resultContext+"fwz233"+splitContext
 }
 resultContext=resultContext.replaceAll("&amp;","&");
@@ -145,12 +145,16 @@ const fetchData_3 = async (ctx) => {
 
 var splitTopic=data.split("title\">Latest<\/h2>")
 
-var splitRes=splitTopic[1].split("<h3 class=\"bc-title\">");//·-datetime
+// var splitRes=splitTopic[1].split("<h3 class=\"bc-title\">");//·-datetime
+// var resultContext=""
+// for(var sb=1;sb<=5;sb++){
+// var splitContext=splitRes[sb].split(/href=\"|\" class=\"|>|<\/a>/)
+var splitRes=splitTopic[1].split("<h5 class=\"display-card-title\">");//·-datetime
 var resultContext=""
 for(var sb=1;sb<=5;sb++){
-var splitContext=splitRes[sb].split(/href=\"|\" class=\"|>|<\/a>/)
+var splitContext=splitRes[sb].split(/href=\"|\">|<\/a>/)
   newsLink[sb-1]=splitContext[1]
-  splitContext=splitContext[1]+"fwz233"+splitContext[3]
+  splitContext=splitContext[1]+"fwz233"+splitContext[2]
   resultContext=resultContext+"fwz233"+splitContext
 }
 resultContext=resultContext.replaceAll("&amp;","&");
@@ -825,6 +829,8 @@ AppSideService({
         return fetchData_text_2(ctx,3)
       }else if (jsonRpc.method === 'GET_NEWS_DATA_2_4') {
         return fetchData_text_2(ctx,4)
+      }else if (jsonRpc.method === 'GET_NEWS_DATA_3_0') {
+        return fetchData_text_3(ctx,0)
       }else if (jsonRpc.method === 'GET_NEWS_DATA_3_1') {
         return fetchData_text_3(ctx,1)
       }else if (jsonRpc.method === 'GET_NEWS_DATA_3_2') {

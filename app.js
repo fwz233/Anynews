@@ -1,7 +1,7 @@
 import './shared/device-polyfill'
 import { MessageBuilder } from './shared/message'
 
-const appId = 1015380
+const appId = 1021030
 const messageBuilder = new MessageBuilder({ appId })
 
 App({

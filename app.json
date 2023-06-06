@@ -1,12 +1,12 @@
 {
   "configVersion": "v2",
   "app": {
-    "appId": 1015380,
+    "appId": 1021030,
     "appName": "Anynews",
     "appType": "app",
     "version": {
-      "code": 1,
-      "name": "1.1.1"
+      "code": 5,
+      "name": "1.4.9"
     },
     "icon": "icon.png",
     "vender": "zepp",
@@ -90,24 +90,19 @@
           "name": "Falconw",
           "deviceSource": 415
         },{
-          "name": "gts4-mini",
-          "deviceSource": 246
+          "name": "gtr-mini",
+          "deviceSource": 250
         },
         {
-          "name": "gts4-miniw",
-          "deviceSource": 247
+          "name": "gtr-miniw",
+          "deviceSource": 251
+        },{
+          "name": "Ultra",
+          "deviceSource": 6553856
         },
         {
-          "name": "band71",
-          "deviceSource": 252
-        },
-        {
-          "name": "band72",
-          "deviceSource": 253
-        },
-        {
-          "name": "band73",
-          "deviceSource": 254
+          "name": "Ultraw",
+          "deviceSource": 6553857
         }       
       ],
       "designWidth": 480
